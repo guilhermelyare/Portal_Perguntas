@@ -1,6 +1,6 @@
 const Squelize = require('sequelize') // squeliza faz com que não precise usar comandos MySQL para usar o banco de dados, em vez disso usa-se comandos do próprio JS
 
-const connection = new Squelize('guiaperguntas','root','123456',{
+const connection = new Squelize('guiaperguntas','root','0gZHEdhY@',{
     host : 'localhost',
     dialect: 'mysql'
 });
