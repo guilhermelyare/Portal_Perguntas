@@ -7,12 +7,19 @@
         <p><%= pergunta.descricao %></p>
         <hr>
         <form method="POST" action="/responder">
-            <h3>Responda</h3>
+            <div style="display: flex; align-items: center;">
+                <h3>Responda</h3>
+                <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip" title="Contribua adicionando sua resposta">
+                    <button class="btn btn-primary" style="pointer-events: none;" type="button" disabled>?</button>
+                </span>
+            </div>
             <label>Sua resposta:</label>
             <textarea placeholder="Digite sua resposta" class="form-control" name="corpo"></textarea>
             <br>
             <input type="hidden" name="pergunta" value="<%= pergunta.id %>">
-            <button type="submit" class="btn btn-primary">Responder</button>
+            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Adicionar resposta">                    
+                <button type="submit" class="btn btn-primary">Responder</button>
+            </span>
         </form>
         <hr>
         <h3>Respostas</h3>

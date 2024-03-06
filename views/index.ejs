@@ -4,9 +4,16 @@
         <%- include('./partials/navbar.ejs')%>
             <div class="container">
                 <hr>
-                <h1> Perguntas </h1>
+                <div style="display: flex; align-items: center;">
+                    <h1> Perguntas </h1>
+                    <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip" title="Página com todas as perguntas">
+                        <button class="btn btn-primary" style="pointer-events: none;" type="button" disabled>?</button>
+                    </span>
+                </div>
                 <hr>
-                <a href="/perguntar" class="btn btn-primary">Fazer pergunta</a>
+                <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip" title="Ir para a página de perguntas">
+                    <a href="/perguntar" class="btn btn-primary">Fazer pergunta</a>
+                </span>
                 <br>
                 <% perguntas.forEach(pergunta=> { %>
                     <br>
@@ -15,15 +22,19 @@
                             <div class="float-right">
                                 <%- include('./partials/popupDelQuestion.ejs', { perguntaId: pergunta.id,
                                     modalId: 'delQuestionModal_' + pergunta.id }) %>
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip" title="Apague a pergunta">
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                         data-bs-target="#<%= 'delQuestionModal_' + pergunta.id %>">X</button>
+                                    </span>
                             </div>
                             <h3>
                                 <%= pergunta.titulo %>
                             </h3>
                         </div>
                         <div class="card-footer">
-                            <a class="btn btn-primary" href="pergunta/<%= pergunta.id %>">Responder</a>
+                            <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip" title="Ir para página de respostas">        
+                                <a class="btn btn-primary" href="pergunta/<%= pergunta.id %>">Responder</a>
+                            </span>
                         </div>
                     </div>
                     <% }) %>
