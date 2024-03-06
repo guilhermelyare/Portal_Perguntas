@@ -90,4 +90,17 @@ app.post("/responder", (req,res)=> {
     })
 })
 
+app.delete("/pergunta/:id", (req, res) => {
+    var id = req.params.id;
+
+    Pergunta.destroy({
+        where: { id: id }
+    }).then(() => {
+        res.status(204).send(); // 204 No Content para indicar sucesso sem conteúdo
+    }).catch(err => {
+        console.error(err);
+        res.status(500).json({ error: "Erro interno do servidor" });
+    });
+});
+
 app.listen(8080,()=>{console.log("App rodando na porta 8080!");});

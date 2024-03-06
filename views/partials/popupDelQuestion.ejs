@@ -1,0 +1,44 @@
+<div class="modal fade" id="<%= 'delQuestionModal_' + perguntaId %>" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Deletar pergunta</h1>
+            </div>
+            <div class="modal-body">
+                Você tem certeza que deseja deletar essa pergunta?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Não</button>
+                <button type="button" class="btn btn-success" id="pergunta_<%= perguntaId %>">Sim</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Adicione um evento de clique para todos os botões "Sim" dentro do modal
+    document.querySelectorAll('.btn-success').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            // Obtenha o ID da pergunta do ID do botão
+            var perguntaId = this.id.replace('pergunta_', ''); // Remova o prefixo 'pergunta_'
+
+            // Substitua 'SEU_ENDPOINT' pela rota correta
+            $.ajax({
+                url: '/pergunta/' + perguntaId,
+                type: 'DELETE',
+                success: function () {
+                    // A exclusão foi bem-sucedida, feche o modal ou realize outras ações necessárias
+                    $('#delQuestionModal_' + perguntaId).modal('hide');
+
+                    // Recarregue a página
+                    location.reload();
+                },
+                error: function (error) {
+                    // Trate casos de erro, se necessário
+                    console.error('Erro ao excluir a pergunta:', error);
+                }
+            });
+        });
+    });
+</script>

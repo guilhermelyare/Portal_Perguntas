@@ -1,25 +1,32 @@
 <%- include('./partials/header.ejs')%>
-<body>
-    <%- include('./partials/navbar.ejs')%>
 
-    <div class="container">
-        <hr>
-        <h1> Perguntas </h1>
-        <hr>
-        <a href="/perguntar" class="btn btn-primary">Fazer pergunta</a>
-        <br>
-        <% perguntas.forEach(pergunta => { %>
-            <br>
-            <div class="card">
-                <div class="card-body">
-                    <h3><%= pergunta.titulo %></h3>
-                </div>
-                <div class="card-footer">
-                    <a class="btn btn-primary" href="pergunta/<%= pergunta.id %>">Responder</a>
-                </div>
+    <body>
+        <%- include('./partials/navbar.ejs')%>
+            <div class="container">
+                <hr>
+                <h1> Perguntas </h1>
+                <hr>
+                <a href="/perguntar" class="btn btn-primary">Fazer pergunta</a>
+                <br>
+                <% perguntas.forEach(pergunta=> { %>
+                    <br>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="float-right">
+                                <%- include('./partials/popupDelQuestion.ejs', { perguntaId: pergunta.id,
+                                    modalId: 'delQuestionModal_' + pergunta.id }) %>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#<%= 'delQuestionModal_' + pergunta.id %>">X</button>
+                            </div>
+                            <h3>
+                                <%= pergunta.titulo %>
+                            </h3>
+                        </div>
+                        <div class="card-footer">
+                            <a class="btn btn-primary" href="pergunta/<%= pergunta.id %>">Responder</a>
+                        </div>
+                    </div>
+                    <% }) %>
             </div>
-        <% }) %>
-        
-    </div>
-</body>
-<%- include('./partials/footer.ejs')%>
+    </body>
+    <%- include('./partials/footer.ejs')%>
