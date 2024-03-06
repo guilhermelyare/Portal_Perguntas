@@ -9,6 +9,10 @@ const Pergunta = connection.define('perguntas',{
     descricao:{
         type: Squelize.TEXT,
         allowNull: false
+    },
+    tema:{
+        type: Squelize.INTEGER,
+        allowNull: false
     }
 });
 

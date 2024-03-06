@@ -11,6 +11,15 @@
                         <div class="card-body">
                             <form method="POST" action="/salvarpergunta" id="perguntaForm">
                                 <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <label style="margin-right: 10px;" for="tema">Tema da pergunta: </label>
+                                    <select style="width: 200px;" class="form-control" name="tema" id="tema">
+                                        <option value="1">Linguagem de programação</option>
+                                        <option value="2">Bug em código</option>
+                                        <option value="3">Padrão de projeto</option>
+                                        <option value="4">Boa prática na escrita</option>
+                                    </select>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
                                     <label>Título</label>
                                     <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip" title="Escreva a sua pergunta">
                                         <button class="btn btn-primary" style="pointer-events: none;" type="button" disabled>?</button>

@@ -1,43 +1,79 @@
 <%- include('./partials/header.ejs')%>
 
-    <body>
-        <%- include('./partials/navbar.ejs')%>
-            <div class="container">
-                <hr>
-                <div style="display: flex; align-items: center;">
-                    <h1> Perguntas </h1>
-                    <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip" title="Página com todas as perguntas">
-                        <button class="btn btn-primary" style="pointer-events: none;" type="button" disabled>?</button>
+<body>
+    <%- include('./partials/navbar.ejs')%>
+    <div class="container">
+        <hr>
+        <div style="display: flex; align-items: center;">
+            <h1> Perguntas </h1>
+            <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip"
+                title="Página com todas as perguntas">
+                <button class="btn btn-primary" style="pointer-events: none;" type="button" disabled>?</button>
+            </span>
+        </div>
+        <hr>
+        <div>
+            <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip"
+                title="Ir para a página de perguntas">
+                <a href="/perguntar" class="btn btn-primary">Fazer pergunta</a>
+            </span>
+
+            <div style="margin-left: 12px; width: 200px; margin-top: 50px;">
+                <label for="filtroTema">Filtrar por tema:</label>
+                <select class="form-control" id="filtroTema">
+                    <option value="">Todos</option>
+                    <option value="1">Linguagem de programação</option>
+                    <option value="2">Bug em código</option>
+                    <option value="3">Padrão de projeto</option>
+                    <option value="4">Boa prática na escrita</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <% perguntas.forEach(pergunta=> { %>
+        <br>
+        <div class="card" data-tema="<%= pergunta.tema %>">
+            <div class="card-body">
+                <div class="float-right">
+                    <%- include('./partials/popupDelQuestion.ejs', { perguntaId: pergunta.id,
+                    modalId: 'delQuestionModal_' + pergunta.id }) %>
+                    <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip"
+                        title="Apague a pergunta">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#<%= 'delQuestionModal_' + pergunta.id %>">X</button>
                     </span>
                 </div>
-                <hr>
-                <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip" title="Ir para a página de perguntas">
-                    <a href="/perguntar" class="btn btn-primary">Fazer pergunta</a>
-                </span>
-                <br>
-                <% perguntas.forEach(pergunta=> { %>
-                    <br>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="float-right">
-                                <%- include('./partials/popupDelQuestion.ejs', { perguntaId: pergunta.id,
-                                    modalId: 'delQuestionModal_' + pergunta.id }) %>
-                                    <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip" title="Apague a pergunta">
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                        data-bs-target="#<%= 'delQuestionModal_' + pergunta.id %>">X</button>
-                                    </span>
-                            </div>
-                            <h3>
-                                <%= pergunta.titulo %>
-                            </h3>
-                        </div>
-                        <div class="card-footer">
-                            <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip" title="Ir para página de respostas">        
-                                <a class="btn btn-primary" href="pergunta/<%= pergunta.id %>">Responder</a>
-                            </span>
-                        </div>
-                    </div>
-                    <% }) %>
+                <h3>
+                    <%= pergunta.titulo %>
+                </h3>
             </div>
-    </body>
-    <%- include('./partials/footer.ejs')%>
+            <div class="card-footer">
+                <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip"
+                    title="Ir para página de respostas">
+                    <a class="btn btn-primary" href="pergunta/<%= pergunta.id %>">Responder</a>
+                </span>
+            </div>
+        </div>
+        <% }) %>
+    </div>
+
+    <!-- Adicione o script para filtrar as perguntas -->
+    <script>
+        document.getElementById('filtroTema').addEventListener('change', function () {
+            var temaSelecionado = this.value;
+            var cardsPerguntas = document.querySelectorAll('.card');
+    
+            cardsPerguntas.forEach(function (card) {
+                var temaPergunta = card.getAttribute('data-tema'); // Obtém o tema associado à pergunta
+    
+                if (temaSelecionado === '' || temaPergunta === temaSelecionado) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    
+</body>
+<%- include('./partials/footer.ejs')%>
