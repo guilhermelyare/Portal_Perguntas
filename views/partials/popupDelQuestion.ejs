@@ -22,7 +22,6 @@
         btn.addEventListener('click', function () {
             // Obtenha o ID da pergunta do ID do botão
             var perguntaId = this.id.replace('pergunta_', ''); // Remova o prefixo 'pergunta_'
-            console.log(perguntaId);
 
             // Substitua 'SEU_ENDPOINT' pela rota correta
             $.ajax({
@@ -31,6 +30,9 @@
                 success: function () {
                     // A exclusão foi bem-sucedida, feche o modal ou realize outras ações necessárias
                     $('#delQuestionModal_' + perguntaId).modal('hide');
+
+                    // Recarregue a página
+                    location.reload();
                 },
                 error: function (error) {
                     // Trate casos de erro, se necessário
