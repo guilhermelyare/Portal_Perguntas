@@ -32,6 +32,20 @@
                 </div>
             </div>
         <% }) %>
+
+        <% if (totalPaginas > 1) { %>
+            <ul class="pagination">
+                <% const intervalo = 5; // Define o tamanho do intervalo de páginas a ser exibido %>
+                <% const inicio = Math.max(paginaAtual - Math.floor(intervalo / 2), 1); %>
+                <% const fim = Math.min(inicio + intervalo - 1, totalPaginas); %>
+                <% for (let i = inicio; i <= fim; i++) { %>
+                    <li class="page-item <%= paginaAtual === i ? 'active' : '' %>">
+                        <a class="page-link" href="/pergunta/<%= pergunta.id %>?pagina=<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+            </ul>
+        <% } %>
+        
     </div>
 </body>
 <%- include('./partials/footer.ejs')%>

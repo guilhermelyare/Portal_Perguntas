@@ -1,5 +1,4 @@
 <%- include('./partials/header.ejs')%>
-
 <body>
     <%- include('./partials/navbar.ejs')%>
     <div class="container">
@@ -17,35 +16,25 @@
                 title="Ir para a página de perguntas">
                 <a href="/perguntar" class="btn btn-primary">Fazer pergunta</a>
             </span>
-
             <div style="margin-left: 12px; width: 200px; margin-top: 50px;">
                 <label for="filtroTema">Filtrar por tema:</label>
                 <select class="form-control" id="filtroTema">
                     <option value="">Todos</option>
-                    <option value="1">Linguagem de programação</option>
-                    <option value="2">Bug em código</option>
-                    <option value="3">Padrão de projeto</option>
-                    <option value="4">Boa prática na escrita</option>
+                    <option value="1" <%= filtroTema === '1' ? 'selected' : '' %> >Linguagem de programação</option>
+                    <option value="2" <%= filtroTema === '2' ? 'selected' : '' %>>Bug em código</option>
+                    <option value="3" <%= filtroTema === '3' ? 'selected' : '' %>>Padrão de projeto</option>
+                    <option value="4" <%= filtroTema === '4' ? 'selected' : '' %>>Boa prática na escrita</option>
                 </select>
+                
             </div>
         </div>
         <br>
-        <% perguntas.forEach(pergunta=> { %>
+        <% perguntas.forEach(pergunta => { %>
+        <% const tema = pergunta.tema; %>
         <br>
-        <div class="card" data-tema="<%= pergunta.tema %>">
+        <div class="card" data-tema="<%= tema %>">
             <div class="card-body">
-                <div class="float-right">
-                    <%- include('./partials/popupDelQuestion.ejs', { perguntaId: pergunta.id,
-                    modalId: 'delQuestionModal_' + pergunta.id }) %>
-                    <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip"
-                        title="Apague a pergunta">
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                            data-bs-target="#<%= 'delQuestionModal_' + pergunta.id %>">X</button>
-                    </span>
-                </div>
-                <h3>
-                    <%= pergunta.titulo %>
-                </h3>
+                <h3><%= pergunta.titulo %></h3>
             </div>
             <div class="card-footer">
                 <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip"
@@ -55,25 +44,27 @@
             </div>
         </div>
         <% }) %>
+        
+        <!-- Links de Paginação -->
+        <% if (totalPaginas > 1) { %>
+            <ul class="pagination">
+                <% const inicio = Math.max(paginaAtual - 2, 1); %>
+                <% const fim = Math.min(inicio + 4, totalPaginas); %>
+                <% for (let i = inicio; i <= fim; i++) { %>
+                    <li class="page-item <%= paginaAtual === i ? 'active' : '' %>">
+                        <a class="page-link" href="/?pagina=<%= i %><%= filtroTema ? '&tema=' + filtroTema : '' %>"><%= i %></a>
+                    </li>
+                <% } %>
+            </ul>
+        <% } %>        
     </div>
 
-    <!-- Adicione o script para filtrar as perguntas -->
     <script>
         document.getElementById('filtroTema').addEventListener('change', function () {
             var temaSelecionado = this.value;
-            var cardsPerguntas = document.querySelectorAll('.card');
-    
-            cardsPerguntas.forEach(function (card) {
-                var temaPergunta = card.getAttribute('data-tema'); // Obtém o tema associado à pergunta
-    
-                if (temaSelecionado === '' || temaPergunta === temaSelecionado) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            window.location.href = "/?tema=" + temaSelecionado;
         });
     </script>
-    
+
 </body>
 <%- include('./partials/footer.ejs')%>
