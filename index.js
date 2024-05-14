@@ -4,6 +4,33 @@ const bodyParser = require("body-parser")// importando o body passer
 const connection = require("./database/database")// conexao com o banco de dados
 const Pergunta = require("./database/Pergunta")// Importando o model pergunta para a criação da tabela no Banco de dados
 const Resposta = require("./database/Resposta")
+const rateLimit = require("express-rate-limit");
+const cache = require("memory-cache");
+const Queue = require("bull");
+const minhaFila = new Queue("minhaFila");
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+
+app.use(limiter);
+
+function cacheMiddleware(req, res, next) {
+    const key = "__express__" + req.originalUrl || req.url;
+    const cachedBody = cache.get(key);
+    if (cachedBody) {
+      res.send(cachedBody);
+      return;
+    } else {
+      res.sendResponse = res.send;
+      res.send = (body) => {
+        cache.put(key, body);
+        res.sendResponse(body);
+      };
+      next();
+    }
+}
 
 //Database
 connection
@@ -26,7 +53,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 //Rotas
-app.get("/", async (req, res) => {
+app.get("/", cacheMiddleware, async (req, res) => {
     const pagina = req.query.pagina || 1; // Página atual (padrão: 1)
     const porPagina = 5; // Quantidade de perguntas por página
     const offset = (pagina - 1) * porPagina; // Offset para consulta
@@ -66,18 +93,26 @@ app.get("/perguntar", (req,res) => {
     res.render("perguntar");
 });
 
-app.post("/salvarpergunta", (req,res) =>{
+app.post("/salvarpergunta", (req, res) => {
     var titulo = req.body.titulo;
     var descricao = req.body.descricao;
-    var tema = req.body.tema
-    //Para salvar um dado em uma tabela devo chamar o model que representa essa tabela (Pergunta) e usar o .creat() que é equivalente ao INSERT INTO do mysql
-    Pergunta.create({
-        titulo: titulo,
-        descricao: descricao,
-        tema: tema
-    }).then(()=>{
-        res.redirect("/");//redirecionado para a pagina inicial
-    })//o .then serve para fazer algo quando a pergunta for salva no banco de dados
+    var tema = req.body.tema;
+  
+    // Adicionar uma tarefa à fila para processar a pergunta
+    minhaFila.add({ type: 'processarPergunta', titulo, descricao, tema });
+  
+    res.redirect("/");
+  });
+  
+  // Processar tarefa da fila
+  minhaFila.process('processarPergunta', async (job) => {
+    const { titulo, descricao, tema } = job.data;
+  
+    await Pergunta.create({
+      titulo: titulo,
+      descricao: descricao,
+      tema: tema
+    });
 });
 
 app.get("/pergunta/:id", async (req, res) => {
