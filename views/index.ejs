@@ -55,6 +55,20 @@
             </div>
         </div>
         <% }) %>
+
+        
+        <!-- Links de Paginação -->
+        <% if (totalPaginas > 1) { %>
+            <ul class="pagination">
+                <% const inicio = Math.max(paginaAtual - 2, 1); %>
+                <% const fim = Math.min(inicio + 4, totalPaginas); %>
+                <% for (let i = inicio; i <= fim; i++) { %>
+                    <li class="page-item <%= paginaAtual === i ? 'active' : '' %>">
+                        <a class="page-link" href="/?pagina=<%= i %><%= filtroTema ? '&tema=' + filtroTema : '' %>"><%= i %></a>
+                    </li>
+                <% } %>
+            </ul>
+        <% } %> 
     </div>
 
     <!-- Adicione o script para filtrar as perguntas -->

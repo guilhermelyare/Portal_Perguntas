@@ -26,18 +26,38 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 //Rotas
-app.get("/", (req,res) => {
-    //O .findAll() é responsável por selecionar dados da tabela é equivalente ao SELECT ALL FROM do MySQL
-    //O raw é uma pesquisa crua que vai trazer apenas os dados e não todas as informações da tabela
-    //O order serve para dizer como vai ser a ordenação dos dados que vão sendo selecionados 
-    //Dentro do then está sendo criado uma variavel perguntas tem uma função que renderiza a pagina index.ejs e passa os dados atraves da vriavel perguntas
-    Pergunta.findAll({ raw:true, order: [
-        ['id','DESC']//DESC = decescente e ASC = crescente
-    ]}).then(perguntas => {
-        res.render("index",{
+app.get("/", async (req, res) => {
+    const pagina = req.query.pagina || 1; // Página atual (padrão: 1)
+    const porPagina = 5; // Quantidade de perguntas por página
+    const offset = (pagina - 1) * porPagina; // Offset para consulta
+    const filtroTema = req.query.tema; // Filtro de tema
+
+    try {
+        let consulta = {
+            raw: true,
+            order: [['id', 'ASC']], // Ordenação das perguntas
+            limit: porPagina,
+            offset: offset
+        };
+
+        if (filtroTema) {
+            consulta.where = { tema: filtroTema };
+        }
+
+        const { count, rows: perguntas } = await Pergunta.findAndCountAll(consulta);
+
+        const totalPaginas = Math.ceil(count / porPagina);
+
+        res.render("index", {
             perguntas: perguntas,
+            totalPaginas: totalPaginas,
+            paginaAtual: pagina,
+            filtroTema: filtroTema // Passando a variável filtroTema para o template EJS
         });
-    })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Erro interno do servidor");
+    }
 });
 
 app.get("/perguntar", (req,res) => {
