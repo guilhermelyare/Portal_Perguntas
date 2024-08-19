@@ -64,19 +64,21 @@ app.get("/perguntar", (req,res) => {
     res.render("perguntar");
 });
 
-app.post("/salvarpergunta", (req,res) =>{
+app.post("/salvarpergunta", (req, res) => {
     var titulo = req.body.titulo;
     var descricao = req.body.descricao;
-    var tema = req.body.tema
-    //Para salvar um dado em uma tabela devo chamar o model que representa essa tabela (Pergunta) e usar o .creat() que é equivalente ao INSERT INTO do mysql
+    var tema = req.body.tema;
+
+    // Salvar a pergunta no banco de dados
     Pergunta.create({
         titulo: titulo,
         descricao: descricao,
         tema: tema
-    }).then(()=>{
-        res.redirect("/");//redirecionado para a pagina inicial
-    })//o .then serve para fazer algo quando a pergunta for salva no banco de dados
+    }).then(() => {
+        res.redirect("/"); // Redirecionado para a página inicial
+    });
 });
+
 
 app.get("/pergunta/:id", (req,res)=>{
     var id = req.params.id;

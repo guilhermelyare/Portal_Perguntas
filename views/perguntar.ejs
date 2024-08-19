@@ -20,28 +20,51 @@
                                     </select>
                                 </div>
                                 <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                                    <label>Título</label>
+                                    <label>Título<span class="text-danger">*</span></label>
                                     <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip" title="Escreva a sua pergunta">
                                         <button class="btn btn-primary" style="pointer-events: none;" type="button" disabled>?</button>
                                     </span>
                                 </div>
-                                <input type="text" placeholder="Título da pergunta" class="form-control" name="titulo">
+                                <input type="text" placeholder="Título da pergunta" class="form-control" name="titulo" id="titulo">
                                 <br>
                                 <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                                    <label>Descrição</label>
+                                    <label>Descrição<span class="text-danger">*</span></label>
                                     <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip" title="Escreva detalhes ou informações adicionais">
                                         <button class="btn btn-primary" style="pointer-events: none;" type="button" disabled>?</button>
                                     </span>
                                 </div>
-                                <textarea placeholder="Escreva sua pergunta" class="form-control"
+                                <textarea placeholder="Escreva sua pergunta" class="form-control " name="descricao" id="descricao"
                                     name="descricao"></textarea>
                                 <br>
                                 <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip" title="Preencha os campos para realizar a pergunta">
-                                    <button class="btn btn-primary" id="btnAbrirModal">Perguntar</button>
+                                    <button class="btn btn-primary" id="btnAbrirModal" disabled>Perguntar</button>
                                 </span>
                             </form>
                         </div>
                     </div>
             </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    console.log("DOM totalmente carregado");
+        
+                    const titulo = document.getElementById('titulo');
+                    const descricao = document.getElementById('descricao');
+                    const btnPerguntar = document.getElementById('btnAbrirModal');
+        
+                    function validarCampos() {
+
+                        if (titulo.value.trim() !== '' && descricao.value.trim() !== '') {
+                            btnPerguntar.disabled = false;
+                        } else {
+                            btnPerguntar.disabled = true;
+                        }
+                    }
+        
+                    titulo.addEventListener('input', validarCampos);
+                    descricao.addEventListener('input', validarCampos);
+        
+                });
+            </script>
     </body>
+    
     <%- include('./partials/footer.ejs')%>
