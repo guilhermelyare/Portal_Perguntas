@@ -30,7 +30,16 @@
             </div>
         </div>
         <br>
-        <% perguntas.forEach(pergunta=> { %>
+        <% 
+            // Mapeamento dos valores numéricos para os nomes dos temas
+            const temas = {
+                '1': 'Linguagem de programação',
+                '2': 'Bug em código',
+                '3': 'Padrão de projeto',
+                '4': 'Boa prática na escrita'
+            };
+        %>
+        <% perguntas.forEach(pergunta => { %>
         <br>
         <div class="card" data-tema="<%= pergunta.tema %>">
             <div class="card-body">
@@ -46,6 +55,9 @@
                 <h3>
                     <%= pergunta.titulo %>
                 </h3>
+                <span style="background-color: #e9ecef; color: #495057; font-size: 0.9em; padding: 5px 10px; border-radius: 5px;">
+                    <%= temas[pergunta.tema] %>
+                </span>
             </div>
             <div class="card-footer">
                 <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip"
