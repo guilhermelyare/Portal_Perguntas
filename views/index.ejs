@@ -4,7 +4,7 @@
     <%- include('./partials/navbar.ejs')%>
     <div class="container">
         <hr>
-        <div style="display: flex; align-items: center;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
             <h1> Perguntas </h1>
             <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip"
                 title="Página com todas as perguntas">
@@ -12,13 +12,10 @@
             </span>
         </div>
         <hr>
-        <div>
-            <span class="d-inline-block" style="margin-left: 12px;" tabindex="0" data-toggle="tooltip"
-                title="Ir para a página de perguntas">
-                <a href="/perguntar" class="btn btn-primary">Fazer pergunta</a>
-            </span>
 
-            <div style="margin-left: 12px; width: 200px; margin-top: 50px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <!-- Filtro de Temas no canto esquerdo -->
+            <div style="width: 50%;">
                 <label for="filtroTema">Filtrar por tema:</label>
                 <select class="form-control" id="filtroTema">
                     <option value="">Todos</option>
@@ -28,10 +25,15 @@
                     <option value="4">Boa prática na escrita</option>
                 </select>
             </div>
+
+            <!-- Barra de Busca no canto direito -->
+            <div style="width: 50%; text-align: right;">
+                <label for="search">Buscar por título:</label>
+                <input type="text" id="search" class="form-control" placeholder="Digite o título da pergunta" style="width: 100%; max-width: 300px; display: inline-block;">
+            </div>
         </div>
-        <br>
+        
         <% 
-            // Mapeamento dos valores numéricos para os nomes dos temas
             const temas = {
                 '1': 'Linguagem de programação',
                 '2': 'Bug em código',
@@ -41,7 +43,7 @@
         %>
         <% perguntas.forEach(pergunta => { %>
         <br>
-        <div class="card" data-tema="<%= pergunta.tema %>">
+        <div class="card" data-tema="<%= pergunta.tema %>" data-title="<%= pergunta.titulo.toLowerCase() %>">
             <div class="card-body">
                 <div class="float-right">
                     <%- include('./partials/popupDelQuestion.ejs', { perguntaId: pergunta.id,
@@ -68,7 +70,6 @@
         </div>
         <% }) %>
 
-        
         <!-- Links de Paginação -->
         <% if (totalPaginas > 1) { %>
             <ul class="pagination">
@@ -99,7 +100,22 @@
                 }
             });
         });
+
+        // Adicionar funcionalidade de busca
+        document.getElementById('search').addEventListener('input', function () {
+            var searchTerm = this.value.toLowerCase();
+            var cardsPerguntas = document.querySelectorAll('.card');
+
+            cardsPerguntas.forEach(function (card) {
+                var titlePergunta = card.getAttribute('data-title'); // Obtém o título da pergunta em minúsculas
+
+                if (titlePergunta.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
     </script>
-    
 </body>
 <%- include('./partials/footer.ejs')%>
