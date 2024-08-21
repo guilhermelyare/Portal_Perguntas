@@ -13,12 +13,12 @@
                     <button class="btn btn-primary" style="pointer-events: none;" type="button" disabled>?</button>
                 </span>
             </div>
-            <label>Sua resposta:</label>
-            <textarea placeholder="Digite sua resposta" class="form-control" name="corpo"></textarea>
+            <label>Sua resposta:<span class="text-danger">*</span></label>
+            <textarea placeholder="Digite sua resposta" class="form-control" name="corpo" id="corpoTexto"></textarea>
             <br>
             <input type="hidden" name="pergunta" value="<%= pergunta.id %>">
             <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Adicionar resposta">                    
-                <button type="submit" class="btn btn-primary">Responder</button>
+                <button type="submit" class="btn btn-primary" id="responderBtn" disabled>Responder</button>
             </span>
         </form>
         <hr>
@@ -28,11 +28,23 @@
             <br>
             <div class="card">
                 <div class="card-body">
-                    <p>@<strong><%= resposta.usuario.nome %></strong>
+                    <p>@<strong><%= resposta.usuario.nome %></strong></p>
                     <p><%= resposta.corpo %></p>
                 </div>
             </div>
         <% }) %>
     </div>
+
+    <!-- JavaScript para habilitar/desabilitar o botão -->
+    <script>
+        document.getElementById('corpoTexto').addEventListener('input', function() {
+            var responderBtn = document.getElementById('responderBtn');
+            if (this.value.trim() === '') {
+                responderBtn.disabled = true; // Desabilita o botão se o texto estiver vazio
+            } else {
+                responderBtn.disabled = false; // Habilita o botão se houver texto
+            }
+        });
+    </script>
 </body>
 <%- include('./partials/footer.ejs')%>
